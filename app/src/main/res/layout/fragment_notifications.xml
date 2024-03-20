@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Bell Icon -->
+
+    <!-- No Notifications Text -->
+        <!-- Container for ImageView and TextView -->
+        <LinearLayout
+            android:id="@+id/containerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <!-- Bell Icon -->
+            <ImageView
+                android:id="@+id/bellIcon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/notification"
+                android:layout_gravity="center_horizontal"/>
+
+            <!-- No Notifications Text -->
+            <TextView
+                android:id="@+id/noNotificationsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_notifications_yet"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notificationRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+    <!-- Other UI elements if needed -->
+
+</RelativeLayout>

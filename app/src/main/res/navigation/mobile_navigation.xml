@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.sms_spam_detection.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.sms_spam_detection.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard">
+
+        <action
+            android:id="@+id/action_Dashboard_to_SuspiciousFragment"
+            app:destination="@id/suspicious_fragment" />
+        <action
+            android:id="@+id/action_Dashboard_to_scanning_Background"
+            app:destination="@id/scanning_background" />
+        </fragment>
+
+
+    <fragment
+        android:id="@+id/scanning_background"
+        android:name="com.example.sms_spam_detection.ui.dashboard.ScanningBackground"
+        android:label="Scanning"
+        tools:layout="@layout/scanning_background">
+
+        <action
+            android:id="@+id/action_Dashboard_to_scanning_Background"
+            app:destination="@id/navigation_dashboard"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/suspicious_fragment"
+        android:name="com.example.sms_spam_detection.ui.dashboard.SuspiciousFragment"
+        android:label="Insight"
+        tools:layout="@layout/suspicious_fragment">
+
+    <action
+        android:id="@+id/SuspiciousFragment_to_action_Dashboard"
+        app:destination="@id/navigation_dashboard" />
+
+</fragment>
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.example.sms_spam_detection.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>

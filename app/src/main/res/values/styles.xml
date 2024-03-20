@@ -1,0 +1,7 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- ... other attributes ... -->
+        <item name="colorPrimary">@color/teal_200</item> <!-- Replace with your color code -->
+        <!-- ... other attributes ... -->
+    </style>
+</resources>
