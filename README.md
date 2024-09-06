@@ -17,11 +17,16 @@
 
 ## Installation
 
+There are two ways of installing this app:
+
 1. **Open the Project**:
   - Open the project in Android Studio.
 
 2. **Build and Run**:
   - Build the project and run it on an Android device or emulator.
+
+1. **Link given**
+  - Click on the website in the About section of this repository.
 
 ## Usage
 
