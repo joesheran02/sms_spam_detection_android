@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Settings">
+
+        <PreferenceScreen
+            android:key="about_section"
+            android:title="About"
+            android:summary="Information about the app, version, and developer">
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:key="manage_permissions"
+            android:title="Manage Permissions"
+            android:summary="Allow or block app permissions">
+        </PreferenceScreen>
+
+
+        <PreferenceScreen
+            android:key="manage_sensitivity"
+            android:title="Manage Sensitivity"
+            android:summary="Adjust sensitivity for detection">
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

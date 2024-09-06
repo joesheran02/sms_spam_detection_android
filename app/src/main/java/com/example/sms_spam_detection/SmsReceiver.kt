@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -23,6 +24,7 @@ import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 import java.util.regex.Pattern
 import com.example.sms_spam_detection.MyNotification
+import com.example.sms_spam_detection.ui.notifications.NotificationsFragment
 import com.example.sms_spam_detection.ui.notifications.NotificationsViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -184,7 +186,7 @@ class SmsReceiver : BroadcastReceiver() {
         }
     }
 
-    fun tokenizeAndPadSequence(
+    private fun tokenizeAndPadSequence(
         message: String,
         wordIndex: Map<String, Int>,
         maxLen: Int
@@ -211,7 +213,7 @@ class SmsReceiver : BroadcastReceiver() {
         return paddedSequence
     }
 
-    fun loadTFLiteModel(context: Context, modelName: String): Interpreter {
+    private fun loadTFLiteModel(context: Context, modelName: String): Interpreter {
         // Load the TensorFlow Lite model
         val modelFileDescriptor = context.assets.openFd(modelName)
         val modelFileInputStream = FileInputStream(modelFileDescriptor.fileDescriptor)
@@ -224,7 +226,7 @@ class SmsReceiver : BroadcastReceiver() {
         return Interpreter(modelByteBuffer, options)
     }
 
-    fun runInference(model: Interpreter, textInputSequence: List<Int>, additionalFeatures: List<Float>): Float {
+    private fun runInference(model: Interpreter, textInputSequence: List<Int>, additionalFeatures: List<Float>): Float {
         // Convert the input sequence and additional features to FloatArrays
         val textInputArray = textInputSequence.map { it.toFloat() }.toFloatArray()
         val additionalFeaturesArray = additionalFeatures.toFloatArray()
@@ -285,14 +287,23 @@ class SmsReceiver : BroadcastReceiver() {
     private fun showNotification(context: Context, sender: String?, body: String?, spamProb: Float, isSpam: Boolean) {
         // Implement notification creation and display here
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationColor = ContextCompat.getColor(context, R.color.teal_200)
+        val notificationColor = ContextCompat.getColor(context, R.color.icon_yellow)
+        val notificationId = System.currentTimeMillis().toInt()
 
         // Create a notification channel for Android Oreo and above
         createNotificationChannel(context)
 
+        val intent = Intent(context, MainActivity::class.java).apply {
+            putExtra("destination", "notifications")
+            putExtra("notification_id", notificationId)
+            putExtra("group_summary_id", sender.hashCode())
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
         // Build the notification
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+            .setSmallIcon(R.drawable.chick)
             .setContentTitle("From: $sender")
             .setColor(notificationColor)
             .setStyle(
@@ -301,9 +312,9 @@ class SmsReceiver : BroadcastReceiver() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setGroup(sender)  // Set the same group key for all notifications related to the same sender
+            .setContentIntent(pendingIntent)
 
         // Show the notification with a unique ID
-        val notificationId = System.currentTimeMillis().toInt()
         notificationManager.notify(notificationId, builder.build())
 
         // Optionally, create a summary notification for the group
@@ -313,11 +324,11 @@ class SmsReceiver : BroadcastReceiver() {
     private fun createGroupSummaryNotification(context: Context, sender: String?) {
         // Create a summary notification for the group
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationColor = ContextCompat.getColor(context, R.color.teal_200)
+        val notificationColor = ContextCompat.getColor(context, R.color.icon_yellow)
 
         // Build the summary notification
         val summaryBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+            .setSmallIcon(R.drawable.chick)
             .setContentTitle("SMS Detection")
             .setGroup(sender)
             .setColor(notificationColor)

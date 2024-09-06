@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Sensitivity Settings">
+
+        <SeekBarPreference
+            android:key="sms_spam_sensitivity"
+            android:title="Spam Detection Sensitivity"
+            android:summary="Adjust how sensitive the spam detection is"
+            android:min="0"
+            android:max="100"
+            android:defaultValue="50"
+            app:showSeekBarValue="true"
+            />
+
+        <SeekBarPreference
+            android:key="suspicious_number_sensitivity"
+            android:title="Suspicious Number Sensitivity"
+            android:summary="Adjust how sensitive the suspicious number detection is"
+            android:min="0"
+            android:max="100"
+            android:defaultValue="50"
+            app:showSeekBarValue="true"
+            />
+
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

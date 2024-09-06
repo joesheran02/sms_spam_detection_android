@@ -19,21 +19,26 @@
 
         <action
             android:id="@+id/action_Dashboard_to_SuspiciousFragment"
-            app:destination="@id/suspicious_fragment" />
+            app:destination="@id/suspicious_fragment"
+
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            />
         <action
             android:id="@+id/action_Dashboard_to_scanning_Background"
             app:destination="@id/scanning_background" />
-        </fragment>
+    </fragment>
 
 
     <fragment
         android:id="@+id/scanning_background"
         android:name="com.example.sms_spam_detection.ui.dashboard.ScanningBackground"
-        android:label="Scanning"
         tools:layout="@layout/scanning_background">
 
         <action
-            android:id="@+id/action_Dashboard_to_scanning_Background"
+            android:id="@+id/scanning_Background_to_action_Dashboard"
             app:destination="@id/navigation_dashboard"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
@@ -42,16 +47,44 @@
     </fragment>
 
     <fragment
+        android:id="@+id/numberDetails"
+        android:name="com.example.sms_spam_detection.ui.dashboard.SuspiciousNumberDetails"
+        android:label="Insight"
+        tools:layout="@layout/number_details">
+
+        <argument
+            android:name="suspiciousNumberParcelable"
+            app:argType="com.example.sms_spam_detection.SuspiciousNumberParcel" />
+
+        <action
+            android:id="@+id/InsightFragment_to_suspiciousFragment"
+            app:destination="@id/suspicious_fragment"
+
+            />
+
+    </fragment>
+
+    <fragment
         android:id="@+id/suspicious_fragment"
         android:name="com.example.sms_spam_detection.ui.dashboard.SuspiciousFragment"
         android:label="Insight"
-        tools:layout="@layout/suspicious_fragment">
+        tools:layout="@layout/insights_fragment">
 
     <action
         android:id="@+id/SuspiciousFragment_to_action_Dashboard"
-        app:destination="@id/navigation_dashboard" />
+        app:destination="@id/navigation_dashboard"/>
 
-</fragment>
+        <action
+            android:id="@+id/suspiciousFragmentToInsights"
+            app:destination="@id/numberDetails"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+
+            />
+
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"

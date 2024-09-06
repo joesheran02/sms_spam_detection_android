@@ -1,8 +1,11 @@
 package com.example.sms_spam_detection.ui.home
 
 import android.Manifest
+import android.animation.ValueAnimator
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -20,8 +23,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.example.sms_spam_detection.MyNotification
 import com.example.sms_spam_detection.R
+import com.example.sms_spam_detection.SmsReceiver
 import com.example.sms_spam_detection.databinding.FragmentHomeBinding
 import com.example.sms_spam_detection.ui.notifications.NotificationsAdapter
 import com.example.sms_spam_detection.ui.notifications.NotificationsViewModel
@@ -39,15 +45,35 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private val MY_PERMISSIONS_REQUEST_SMS = 123
-
+    private var enabled: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        enabled = sharedPref.getBoolean("smsReceiverEnabled", false)
 
         val viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         viewModel.isSmsPermissionGranted.observe(viewLifecycleOwner) { isGranted ->
             updateUI(isGranted)
+        }
+
+        val textView : TextView = binding.textHome
+        textView.setOnClickListener {
+            // Disable
+            if (enabled) {
+                textView.text = "Tap to enable"
+                enabled = false // Update state
+                freezeAnimation(true)
+            }
+            // Enable
+            else {
+                textView.text = "Tap to disable"
+                enabled = true
+                freezeAnimation(false)
+            }
+            setSmsReceiverEnabled(enabled)
         }
 
         val enablePermissionsButton: Button = binding.enablePermissions
@@ -61,15 +87,47 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun setSmsReceiverEnabled(enabled: Boolean) {
+        val componentName = ComponentName(requireContext(), SmsReceiver::class.java)
+        val pm : PackageManager = requireContext().packageManager
+        val newState = if (enabled) {
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        }
+        else {
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        }
+        pm.setComponentEnabledSetting(
+            componentName,
+            newState,
+            PackageManager.DONT_KILL_APP
+        )
+    }
+
+
+    private fun freezeAnimation(freeze: Boolean) {
+        val lottieAnimationView = view?.findViewById<LottieAnimationView>(R.id.lottieAnimationView)
+        if (freeze) lottieAnimationView?.pauseAnimation() else lottieAnimationView?.playAnimation()
+    }
+
     private fun updateUI(isSmsPermissionsGranted: Boolean) {
         val textView: TextView = binding.textHome
         val imageView: ImageView = binding.bird
         val enablePermissionsButton: Button = binding.enablePermissions
 
         if (isSmsPermissionsGranted) {
-            textView.text = "Enjoy detecting spam"
             imageView.setImageResource(R.drawable.chick)
             enablePermissionsButton.visibility = View.GONE
+            val lottieAnimationView = view?.findViewById<LottieAnimationView>(R.id.lottieAnimationView)
+            lottieAnimationView?.setAnimation("pulsating_animation.json")
+            lottieAnimationView?.repeatCount = ValueAnimator.INFINITE
+            if (enabled) {
+                lottieAnimationView?.playAnimation()
+                textView.text = "Tap to disable"
+            }
+            else {
+                lottieAnimationView?.pauseAnimation()
+                textView.text = "Tap to enable"
+            }
         }
         else {
             textView.text =
@@ -135,10 +193,13 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
-
-
     override fun onDestroyView() {
         super.onDestroyView()
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putBoolean("smsReceiverEnabled", enabled)
+            apply()
+        }
         _binding = null
     }
 }

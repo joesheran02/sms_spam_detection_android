@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class DashboardViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Begin your first scan"
+        value = "Begin your next scan"
     }
     val text: LiveData<String> = _text
 }

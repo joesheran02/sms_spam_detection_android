@@ -1,6 +1,7 @@
 package com.example.sms_spam_detection
 
 import android.text.format.DateUtils
+import com.example.sms_spam_detection.ui.dashboard.ScanningBackground
 import java.text.SimpleDateFormat
 import java.util.*
 import java.sql.Timestamp
@@ -31,3 +32,34 @@ object TimeUtils {
     }
 }
 
+data class SuspiciousNumber(
+    val phoneNumber: String,
+    val rating: Float,
+    val spamMessages: MutableList<Message>
+)
+
+
+data class
+MessageStats(
+    val numberSmsMessages: Int,
+    val numberSpamMessages: Int,
+    val suspiciousNumbers: List<SuspiciousNumber>,
+    val lastTimeScan: Long
+)
+
+data class HistoryInsight(
+    val insight: String,
+    val lastTimeScanned: Long
+)
+
+data class SpamInfo(
+    var spamCount: Int,
+    var totalMessages: Int,
+    val spamMessages: MutableList<Message> = mutableListOf()
+)
+
+
+data class Message (
+    val message: String,
+    val rating: Float
+)

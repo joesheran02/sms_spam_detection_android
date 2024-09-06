@@ -1,6 +1,9 @@
 package com.example.sms_spam_detection
 
 import android.Manifest
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -10,14 +13,16 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.sms_spam_detection.databinding.ActivityMainBinding
 import androidx.core.content.ContextCompat
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.navigateUp
+import com.example.sms_spam_detection.databinding.ActivityMainBinding
 import com.example.sms_spam_detection.ui.home.HomeViewModel
+import com.example.sms_spam_detection.ui.settings.SettingsActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -77,6 +82,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -91,13 +99,34 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
         ))
-        setupActionBarWithNavController(navController, appBarConfiguration)
 
 
         requestSmsPermissions()
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val destination = intent?.getStringExtra("destination")
+        if (destination == "notifications") {
+            navController.navigate(R.id.navigation_notifications)
+        }
+
+        val notificationId = intent?.getIntExtra("notification_id", -1)
+        if (notificationId != -1) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (notificationId != null) {
+                notificationManager.cancel(notificationId)
+            }
+        }
+
+        val groupSummaryId = intent?.getIntExtra("group_summary_id", -1)
+        if (groupSummaryId != -1) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (groupSummaryId != null) {
+                notificationManager.cancel(groupSummaryId)
+            }
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -105,5 +134,21 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                // Open the settings activity or perform an action
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

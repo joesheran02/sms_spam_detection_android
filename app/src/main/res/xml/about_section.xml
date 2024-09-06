@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="About App">
+
+
+        <Preference
+            android:key="app_version"
+            android:title="Version"
+            android:summary="1.0.0"
+            android:selectable="false"
+        />
+
+    <Preference
+        android:key="developer_info"
+        android:title="Developer"
+        android:summary="Denton Tran"
+        android:selectable="false"
+        />
+
+    <Preference
+        android:key="contact_info"
+        android:title="Contact Info"
+        android:summary="Discord: Pikastunner"
+        android:selectable="false"
+        />
+
+    <Preference
+        android:key="privacy_policy"
+        android:title="Privacy Policy"
+        android:summary="View our privacy policy">
+    </Preference>
+
+
+    <Preference
+        android:key="terms_of_service"
+        android:title="Terms of Service"
+        android:summary="View our terms of service">
+    </Preference>
+
+</PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
