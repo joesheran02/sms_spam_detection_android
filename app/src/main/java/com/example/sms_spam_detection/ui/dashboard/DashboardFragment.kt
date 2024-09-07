@@ -50,9 +50,9 @@ class DashboardFragment : Fragment() {
         val scanButton: LottieAnimationView = view.findViewById(R.id.scan_button)
         val suspiciousTextView: TextView = view.findViewById(R.id.suspicious_numbers)
 
-        scanButton?.setAnimation("scan_button.json")
-        scanButton?.repeatCount = ValueAnimator.INFINITE
-        scanButton?.playAnimation()
+        scanButton.setAnimation("scan_button.json")
+        scanButton.repeatCount = ValueAnimator.INFINITE
+        scanButton.playAnimation()
 
         val argsBundle = Bundle()
 

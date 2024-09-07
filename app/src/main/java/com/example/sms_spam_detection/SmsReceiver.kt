@@ -41,7 +41,6 @@ class SmsReceiver : BroadcastReceiver() {
                 val body = message.messageBody
                 // Add your spam detection and reporting logic here
                 Log.d("SmsReceiver", "Received SMS from $sender: $body")
-
                 val additionalFeatures: List<Float> = createAdditionalFeatures(body)
                 val cleanedText = cleanText(body)
                 Log.d("Additional Features", additionalFeatures.toString())
