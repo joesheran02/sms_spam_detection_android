@@ -17,11 +17,13 @@ import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.navigateUp
 import com.example.sms_spam_detection.databinding.ActivityMainBinding
 import com.example.sms_spam_detection.ui.home.HomeViewModel
+import com.example.sms_spam_detection.ui.notifications.NotificationsViewModel
 import com.example.sms_spam_detection.ui.settings.SettingsActivity
 
 
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
+
 
     private val MY_PERMISSIONS_REQUEST_SMS = 123 // Replace with your desired request code
 

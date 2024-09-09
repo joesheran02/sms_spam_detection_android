@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ class NotificationsFragment : Fragment() {
 
     private lateinit var notificationRecyclerView: RecyclerView
     private lateinit var notificationsAdapter: NotificationsAdapter
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,14 +54,36 @@ class NotificationsFragment : Fragment() {
         Log.d("line 38", viewModel.notifications.value.toString())
 
         Log.d("FragmentLifecycle", "Current State: ${lifecycle.currentState}")
+//        viewModel.notifications.observe(viewLifecycleOwner) { notifications ->
+//            Log.d("FragmentLifecycle", "Current State: ${lifecycle.currentState}")
+//            Log.d("Update in onviewcreated", "Finished line 41")
+//            // Update the UI with the new list of notifications
+//            updateRecyclerView(notifications)
+//        }
+
         viewModel.notifications.observe(viewLifecycleOwner) { notifications ->
-            Log.d("FragmentLifecycle", "Current State: ${lifecycle.currentState}")
             Log.d("Update in onviewcreated", "Finished line 41")
-            // Update the UI with the new list of notifications
             updateRecyclerView(notifications)
         }
 
+
+
         viewModel.updateNotifications(notificationsList)
+
+        sharedPreferences?.registerOnSharedPreferenceChangeListener { prefs, key ->
+            if (key == "notifications") {
+                val notificationsJson = prefs.getString("notifications", null)
+                val notificationsList: List<MyNotification> = if (notificationsJson != null) {
+                    Gson().fromJson(notificationsJson, object : TypeToken<List<MyNotification>>() {}.type)
+                } else {
+                    emptyList()
+                }
+                notificationsAdapter.updateData(notificationsList)  // Update the adapter's dataset
+            }
+            Log.d("OCURRED", "OCJOIJDFODJ")
+        }
+
+
 
         /*if (viewModel.notifications.value.isNullOrEmpty()) {
             val sharedPreferences = context?.getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
@@ -79,20 +103,23 @@ class NotificationsFragment : Fragment() {
 
     private fun updateRecyclerView(notifications: List<MyNotification>?) {
 
-        binding.bellIcon.visibility = View.VISIBLE
-        binding.noNotificationsText.visibility = View.VISIBLE
-        binding.notificationRecyclerView.visibility = View.GONE
-
         // Set up RecyclerView and NotificationsAdapter
         notifications?.let {
 
-            notificationsAdapter = NotificationsAdapter(it)
-            notificationRecyclerView.adapter = notificationsAdapter
+//            notificationsAdapter = NotificationsAdapter(it)
+//            notificationRecyclerView.adapter = notificationsAdapter
+
+            notificationsAdapter.updateData(it)  // Update the adapter's dataset
 
             if (notifications.isNotEmpty()) {
                 binding.bellIcon.visibility = View.GONE
                 binding.noNotificationsText.visibility = View.GONE
                 binding.notificationRecyclerView.visibility = View.VISIBLE
+            }
+            else {
+                binding.bellIcon.visibility = View.VISIBLE
+                binding.noNotificationsText.visibility = View.VISIBLE
+                binding.notificationRecyclerView.visibility = View.GONE
             }
             Log.d("Entered", "Line 85")
         }
@@ -107,8 +134,6 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
 

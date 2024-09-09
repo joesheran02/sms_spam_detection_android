@@ -13,7 +13,7 @@ import com.example.sms_spam_detection.TimeUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class NotificationsAdapter(private val notifications: List<MyNotification>) :
+class NotificationsAdapter(private var notifications: List<MyNotification>) :
 
     RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder>() {
 
@@ -48,5 +48,10 @@ class NotificationsAdapter(private val notifications: List<MyNotification>) :
 
     override fun getItemCount(): Int {
         return notifications.size
+    }
+
+    fun updateData(newNotifications: List<MyNotification>) {
+        notifications = newNotifications
+        notifyDataSetChanged()
     }
 }
