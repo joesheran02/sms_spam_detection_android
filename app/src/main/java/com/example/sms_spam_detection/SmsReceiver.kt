@@ -59,6 +59,14 @@
                     // Create a new Notification object
                     val newNotification = sender?.let { MyNotification(it, body, spamProb, isSpam, currentTimeMillis) }
 
+                    val updateAction = "com.example.counter.UPDATE_NOTIFICATION"
+
+                    // Broadcast to the widget
+                    val updateWidgetsIntent = Intent(context, MyAppWidgetProvider::class.java).apply {
+                        action = updateAction
+                    }
+                    context.sendBroadcast(updateWidgetsIntent)
+
                     // Get the NotificationsViewModel and update the list
 //                    val viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(context.applicationContext as Application)
 //                        .create(NotificationsViewModel::class.java)
