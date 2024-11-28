@@ -5,4 +5,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="no_notifications_yet">No notifications yet.</string>
     <string name="sms_read_permissions">Enable Sms read permissions</string>
+    <string name="widget_label">Notifications</string>
 </resources>
