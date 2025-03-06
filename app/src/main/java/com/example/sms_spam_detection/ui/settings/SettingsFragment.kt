@@ -9,20 +9,6 @@ import com.example.sms_spam_detection.R
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
-        findPreference<PreferenceScreen>("about_section")?.setOnPreferenceClickListener {
-            parentFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(
-                    androidx.transition.R.anim.abc_grow_fade_in_from_bottom,
-                    androidx.transition.R.anim.abc_shrink_fade_out_from_bottom,
-                    androidx.transition.R.anim.abc_grow_fade_in_from_bottom,
-                    androidx.transition.R.anim.abc_shrink_fade_out_from_bottom,
-                )
-                .replace(android.R.id.content, AboutSettingsFragment())
-                .addToBackStack(null)
-                .commit()
-            true
-        }
 
         findPreference<PreferenceScreen>("manage_permissions")?.setOnPreferenceClickListener {
             parentFragmentManager

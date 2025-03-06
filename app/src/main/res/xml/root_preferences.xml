@@ -6,12 +6,6 @@
         android:title="Settings">
 
         <PreferenceScreen
-            android:key="about_section"
-            android:title="About"
-            android:summary="Information about the app, version, and developer">
-        </PreferenceScreen>
-
-        <PreferenceScreen
             android:key="manage_permissions"
             android:title="Manage Permissions"
             android:summary="Allow or block app permissions">
