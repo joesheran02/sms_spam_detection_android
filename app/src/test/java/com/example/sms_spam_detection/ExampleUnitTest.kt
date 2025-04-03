@@ -3,7 +3,7 @@ package com.example.sms_spam_detection
 import org.junit.Test
 
 import org.junit.Assert.*
-
+// used for testing the app.... To check if the app will execute simple operations before commiting the main code into the project
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

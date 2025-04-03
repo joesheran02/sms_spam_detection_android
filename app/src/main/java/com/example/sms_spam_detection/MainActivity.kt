@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     private val MY_PERMISSIONS_REQUEST_SMS = 123 // Replace with your desired request code
 
+
+    //sms request code
     private fun requestSmsPermissions() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -114,6 +116,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.navigation_notifications)
         }
 
+        // dismiss notifications when opened from notification centre
         val notificationId = intent?.getIntExtra("notification_id", -1)
         if (notificationId != -1) {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -131,14 +134,14 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
+    //Navigation Handling
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
-
+// Menu Options in App
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true;

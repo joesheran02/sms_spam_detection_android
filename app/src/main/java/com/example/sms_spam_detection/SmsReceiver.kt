@@ -17,7 +17,7 @@
     import androidx.lifecycle.ViewModelStoreOwner
     import com.fasterxml.jackson.databind.ObjectMapper
     import com.fasterxml.jackson.core.type.TypeReference
-    import org.tensorflow.lite.Interpreter
+    import org.tensorflow.lite.Interpreter //Implementation of Machine Learning into the App
     import java.io.FileInputStream
     import java.nio.ByteBuffer
     import java.nio.ByteOrder
@@ -285,7 +285,7 @@
             val paddedSequence = tokenizeAndPadSequence(message, wordIndex, maxLen)
     
             // Load TensorFlow Lite model
-            val model = loadTFLiteModel(context, "model.tflite")
+            val model = loadTFLiteModel(context, "model.tflite") // using the .tflite file to implement Spam Protection
     
             // Run inference
             // Decide based on the inference result (you might need to define a threshold)
