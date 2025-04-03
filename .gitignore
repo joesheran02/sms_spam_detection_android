@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+/gradle
+/gradlew
+/hs_err_pid12568
+
